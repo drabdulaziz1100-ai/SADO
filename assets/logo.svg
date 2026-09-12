@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-labelledby="sadoLogoTitle">
+  <title id="sadoLogoTitle">SADO Travel</title>
+  <defs>
+    <linearGradient id="badgeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1f7a4d"/>
+      <stop offset="100%" stop-color="#0f4d30"/>
+    </linearGradient>
+  </defs>
+
+  <circle cx="100" cy="100" r="96" fill="url(#badgeGrad)"/>
+  <circle cx="100" cy="100" r="96" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.6"/>
+
+  <path d="M100 34
+           C 130 34, 150 52, 150 80
+           C 150 112, 128 138, 100 156
+           C 72 138, 50 112, 50 80
+           C 50 52, 70 34, 100 34 Z"
+        fill="none" stroke="#ffffff" stroke-width="4"/>
+
+  <path d="M100 60
+           L112 92
+           L146 96
+           L118 116
+           L126 150
+           L100 130
+           L74 150
+           L82 116
+           L54 96
+           L88 92 Z"
+        fill="#ffffff" opacity="0.95"/>
+
+  <path d="M40 78 C 60 68, 80 68, 100 78 C 120 68, 140 68, 160 78"
+        fill="none" stroke="#ffffff" stroke-width="3" opacity="0.85"/>
+
+  <text x="100" y="182" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif"
+        font-size="26" letter-spacing="4" fill="#ffffff" font-weight="700">SADO</text>
+</svg>
