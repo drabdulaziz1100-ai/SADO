@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const sadoContent = sadoLoadContent();
+  sadoApplyContent(sadoContent);
+
   const navToggle = document.getElementById('navToggle');
   const navLinks = document.getElementById('navLinks');
 
@@ -27,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const text = encodeURIComponent(
         `Salom SADO Travel!\nIsmim: ${name}\nTelefon: ${phone}\nXabar: ${message || "—"}`
       );
-      window.open(`https://ig.me/m/sadotravel?text=${text}`, '_blank');
+      window.open(`https://ig.me/m/${sadoContent.igUsername}?text=${text}`, '_blank');
       form.reset();
     });
   }

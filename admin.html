@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SADO Travel — Admin panel</title>
+<link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  body { background: var(--green-pale); }
+  .admin-wrap { max-width: 1280px; margin: 0 auto; padding: 28px 20px 60px; }
+  .admin-header {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; margin-bottom: 24px; flex-wrap: wrap;
+  }
+  .admin-header .brand { font-weight: 800; font-size: 20px; color: var(--green-dark); display:flex; align-items:center; gap:10px; }
+  .admin-header .brand img { width: 38px; height: 38px; }
+  .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+  .admin-panel {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+  }
+  .admin-panel h2 { margin: 0 0 4px; color: var(--green-dark); font-size: 20px; }
+  .admin-panel .hint { color: var(--muted); font-size: 13px; margin: 0 0 20px; }
+  fieldset { border: 1px solid rgba(15,77,48,0.15); border-radius: 12px; padding: 16px 16px 6px; margin: 0 0 18px; }
+  legend { font-weight: 700; color: var(--green-dark); font-size: 14px; padding: 0 8px; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  label { display: block; font-size: 12.5px; font-weight: 700; color: var(--green-dark); margin: 10px 0 5px; }
+  input[type="text"], textarea {
+    width: 100%; padding: 10px 12px; border-radius: 8px;
+    border: 1px solid rgba(15,77,48,0.2); font-family: inherit; font-size: 14px;
+  }
+  input:focus, textarea:focus { outline: none; border-color: var(--green); }
+  textarea { resize: vertical; }
+  .admin-actions { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+  .admin-actions button { border: none; }
+  .btn-danger { background: #fff; color: #b3261e; border: 2px solid #b3261e !important; }
+  .btn-danger:hover { background: #fdecea; }
+  .save-msg { font-size: 13px; color: var(--green-dark); font-weight: 700; margin-top: 10px; min-height: 18px; }
+  .preview-panel {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    position: sticky;
+    top: 20px;
+  }
+  .preview-panel .preview-head {
+    padding: 14px 18px; border-bottom: 1px solid rgba(15,77,48,0.1);
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .preview-panel .preview-head strong { color: var(--green-dark); font-size: 14px; }
+  .preview-panel iframe { width: 100%; height: 78vh; border: none; display: block; }
+
+  .login-wrap {
+    min-height: 70vh; display: flex; align-items: center; justify-content: center;
+  }
+  .login-card {
+    background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow);
+    padding: 36px 32px; max-width: 360px; width: 100%; text-align: center;
+  }
+  .login-card img { width: 56px; height: 56px; margin: 0 auto 14px; }
+  .login-card h1 { font-size: 20px; color: var(--green-dark); margin: 0 0 6px; }
+  .login-card p { color: var(--muted); font-size: 14px; margin: 0 0 20px; }
+  .login-card input { text-align: center; letter-spacing: 2px; }
+  .login-card button { width: 100%; justify-content: center; margin-top: 14px; border: none; }
+  .login-error { color: #b3261e; font-size: 13px; margin-top: 10px; min-height: 16px; }
+
+  @media (max-width: 960px) {
+    .admin-grid { grid-template-columns: 1fr; }
+    .field-row { grid-template-columns: 1fr; }
+    .preview-panel { position: static; }
+    .preview-panel iframe { height: 60vh; }
+  }
+</style>
+</head>
+<body>
+
+<div class="admin-wrap">
+
+  <div id="loginView" class="login-wrap">
+    <div class="login-card">
+      <img src="assets/logo.svg" alt="SADO Travel">
+      <h1>Admin panelga kirish</h1>
+      <p>Sayt matnlarini tahrirlash uchun parolni kiriting.</p>
+      <input type="text" id="passwordInput" placeholder="Parol" autocomplete="off">
+      <button class="btn btn-primary" id="loginBtn">Kirish</button>
+      <div class="login-error" id="loginError"></div>
+    </div>
+  </div>
+
+  <div id="adminView" hidden>
+    <div class="admin-header">
+      <div class="brand">
+        <img src="assets/logo.svg" alt="SADO Travel">
+        SADO Travel — Admin panel
+      </div>
+      <a class="btn btn-outline" href="index.html" target="_blank" rel="noopener">Saytni ochish ↗</a>
+    </div>
+
+    <div class="admin-grid">
+      <div class="admin-panel">
+        <h2>Sayt matnlarini tahrirlash</h2>
+        <p class="hint">O'zgarishlar ushbu brauzerda saqlanadi. Saqlagach, o'ng tomondagi ko'rinish avtomatik yangilanadi.</p>
+
+        <form id="contentForm">
+
+          <fieldset>
+            <legend>Statistika (Hero bo'limi)</legend>
+            <div class="field-row">
+              <div><label for="stat1Num">1-ko'rsatkich raqami</label><input type="text" id="stat1Num"></div>
+              <div><label for="stat1Label">1-ko'rsatkich matni</label><input type="text" id="stat1Label"></div>
+            </div>
+            <div class="field-row">
+              <div><label for="stat2Num">2-ko'rsatkich raqami</label><input type="text" id="stat2Num"></div>
+              <div><label for="stat2Label">2-ko'rsatkich matni</label><input type="text" id="stat2Label"></div>
+            </div>
+            <div class="field-row">
+              <div><label for="stat3Num">3-ko'rsatkich raqami</label><input type="text" id="stat3Num"></div>
+              <div><label for="stat3Label">3-ko'rsatkich matni</label><input type="text" id="stat3Label"></div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Paketlar</legend>
+            <label for="pkg1Title">1-paket nomi</label><input type="text" id="pkg1Title">
+            <label for="pkg1Desc">1-paket tavsifi</label><textarea id="pkg1Desc" rows="2"></textarea>
+            <label for="pkg1Price">1-paket narxi</label><input type="text" id="pkg1Price">
+
+            <label for="pkg2Title">2-paket nomi</label><input type="text" id="pkg2Title">
+            <label for="pkg2Desc">2-paket tavsifi</label><textarea id="pkg2Desc" rows="2"></textarea>
+            <label for="pkg2Price">2-paket narxi</label><input type="text" id="pkg2Price">
+
+            <label for="pkg3Title">3-paket nomi</label><input type="text" id="pkg3Title">
+            <label for="pkg3Desc">3-paket tavsifi</label><textarea id="pkg3Desc" rows="2"></textarea>
+            <label for="pkg3Price">3-paket narxi</label><input type="text" id="pkg3Price">
+          </fieldset>
+
+          <fieldset>
+            <legend>Mijozlar fikri</legend>
+            <label for="testi1Quote">1-fikr matni</label><textarea id="testi1Quote" rows="2"></textarea>
+            <div class="field-row">
+              <div><label for="testi1Name">Ismi</label><input type="text" id="testi1Name"></div>
+              <div><label for="testi1Role">Lavozimi/roli</label><input type="text" id="testi1Role"></div>
+            </div>
+
+            <label for="testi2Quote">2-fikr matni</label><textarea id="testi2Quote" rows="2"></textarea>
+            <div class="field-row">
+              <div><label for="testi2Name">Ismi</label><input type="text" id="testi2Name"></div>
+              <div><label for="testi2Role">Lavozimi/roli</label><input type="text" id="testi2Role"></div>
+            </div>
+
+            <label for="testi3Quote">3-fikr matni</label><textarea id="testi3Quote" rows="2"></textarea>
+            <div class="field-row">
+              <div><label for="testi3Name">Ismi</label><input type="text" id="testi3Name"></div>
+              <div><label for="testi3Role">Lavozimi/roli</label><input type="text" id="testi3Role"></div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Ijtimoiy tarmoqlar / aloqa</legend>
+            <div class="field-row">
+              <div><label for="igUsername">Instagram username</label><input type="text" id="igUsername" placeholder="sadotravel"></div>
+              <div><label for="threadsUsername">Threads username</label><input type="text" id="threadsUsername" placeholder="sadotravel"></div>
+            </div>
+            <div class="field-row">
+              <div><label for="fbSlug">Facebook manzili (slug)</label><input type="text" id="fbSlug" placeholder="sadotravel"></div>
+              <div><label for="fbName">Facebook sahifa nomi</label><input type="text" id="fbName" placeholder="Sado Travel"></div>
+            </div>
+            <label for="taplinkSlug">Taplink manzili (slug)</label>
+            <input type="text" id="taplinkSlug" placeholder="sadotravel">
+          </fieldset>
+
+          <div class="admin-actions">
+            <button type="submit" class="btn btn-primary">Saqlash</button>
+            <button type="button" id="resetBtn" class="btn btn-danger">Standartga qaytarish</button>
+          </div>
+          <div class="save-msg" id="saveMsg"></div>
+        </form>
+      </div>
+
+      <div class="preview-panel">
+        <div class="preview-head">
+          <strong>Jonli ko'rinish</strong>
+        </div>
+        <iframe id="previewFrame" src="index.html" title="Sayt ko'rinishi"></iframe>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="js/content.js"></script>
+<script>
+  const ADMIN_PASSWORD = 'sado2026';
+  const ADMIN_SESSION_KEY = 'sadoAdminAuthed';
+
+  const loginView = document.getElementById('loginView');
+  const adminView = document.getElementById('adminView');
+  const passwordInput = document.getElementById('passwordInput');
+  const loginBtn = document.getElementById('loginBtn');
+  const loginError = document.getElementById('loginError');
+  const form = document.getElementById('contentForm');
+  const saveMsg = document.getElementById('saveMsg');
+  const previewFrame = document.getElementById('previewFrame');
+
+  const fieldIds = [
+    'stat1Num','stat1Label','stat2Num','stat2Label','stat3Num','stat3Label',
+    'pkg1Title','pkg1Desc','pkg1Price','pkg2Title','pkg2Desc','pkg2Price','pkg3Title','pkg3Desc','pkg3Price',
+    'testi1Quote','testi1Name','testi1Role','testi2Quote','testi2Name','testi2Role','testi3Quote','testi3Name','testi3Role',
+    'igUsername','threadsUsername','fbSlug','fbName','taplinkSlug',
+  ];
+
+  function fillForm(content) {
+    fieldIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.value = content[id] ?? '';
+    });
+  }
+
+  function readForm() {
+    const content = {};
+    fieldIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) content[id] = el.value;
+    });
+    return content;
+  }
+
+  function showAdmin() {
+    loginView.hidden = true;
+    adminView.hidden = false;
+    fillForm(sadoLoadContent());
+  }
+
+  loginBtn.addEventListener('click', () => {
+    if (passwordInput.value === ADMIN_PASSWORD) {
+      sessionStorage.setItem(ADMIN_SESSION_KEY, '1');
+      loginError.textContent = '';
+      showAdmin();
+    } else {
+      loginError.textContent = "Parol noto'g'ri";
+    }
+  });
+  passwordInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') loginBtn.click();
+  });
+
+  if (sessionStorage.getItem(ADMIN_SESSION_KEY) === '1') {
+    showAdmin();
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    sadoSaveContent(readForm());
+    saveMsg.textContent = "Saqlandi — ko'rinish yangilandi.";
+    previewFrame.contentWindow.location.reload();
+    setTimeout(() => { saveMsg.textContent = ''; }, 3000);
+  });
+
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    sadoResetContent();
+    fillForm(sadoLoadContent());
+    saveMsg.textContent = "Standart matnlarga qaytarildi.";
+    previewFrame.contentWindow.location.reload();
+    setTimeout(() => { saveMsg.textContent = ''; }, 3000);
+  });
+</script>
+</body>
+</html>
