@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const text = encodeURIComponent(
         `Salom SADO Travel!\nIsmim: ${name}\nTelefon: ${phone}\nXabar: ${message || "—"}`
       );
-      window.open(`https://t.me/sadotravel?text=${text}`, '_blank');
+      window.open(`https://ig.me/m/sadotravel?text=${text}`, '_blank');
       form.reset();
     });
   }
